@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五周年纪念 · 周雁斌 & 管陈晶晶</title>
+<style>
+/* ===== CSS Reset & Variables ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#fff0f0;--cream:#fff8f0;--lavender:#f0f8ff;
+  --text:#c06070;--text-light:#c08090;--text-dark:#8b4050;
+  --shadow:rgba(192,96,112,0.10);--shadow-md:rgba(192,96,112,0.15);
+  --radius:24px;
+  --font:'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;
+}
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  font-family:var(--font);font-weight:300;letter-spacing:0.08em;
+  color:var(--text);background:var(--pink);
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+
+/* ===== Page Container ===== */
+.page{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  opacity:0;visibility:hidden;
+  transition:opacity .8s cubic-bezier(.4,0,.2,1),visibility .8s;
+  overflow:hidden;
+}
+.page.active{opacity:1;visibility:visible;z-index:1;}
+
+/* ===== Page 1: Opening ===== */
+#page1{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--pink);overflow:hidden;
+}
+.page1-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,#fff0f0,#fff8f0,#f0f0ff,#fff0f5,#f5f0ff,#fff0f0);
+  background-size:400% 400%;
+  animation:bgFlow 20s ease-in-out infinite;z-index:0;
+}
+@keyframes bgFlow{
+  0%,100%{background-position:0% 50%}
+  25%{background-position:100% 0%}
+  50%{background-position:100% 100%}
+  75%{background-position:0% 100%}
+}
+.orb{
+  position:absolute;border-radius:50%;filter:blur(40px);opacity:0.35;z-index:0;
+  animation:orbFloat var(--dur) ease-in-out infinite;
+  animation-delay:var(--delay);
+}
+@keyframes orbFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  25%{transform:translate(var(--dx1),var(--dy1)) scale(1.15)}
+  50%{transform:translate(var(--dx2),var(--dy2)) scale(0.9)}
+  75%{transform:translate(var(--dx3),var(--dy3)) scale(1.1)}
+}
+.ring{
+  position:absolute;border:1.5px solid rgba(192,96,112,0.18);border-radius:50%;z-index:0;
+  animation:ringRotate var(--dur) linear infinite;
+}
+@keyframes ringRotate{to{transform:rotate(360deg)}}
+.ring::after{
+  content:'';position:absolute;width:6px;height:6px;border-radius:50%;
+  background:rgba(192,96,112,0.25);top:-3px;left:50%;margin-left:-3px;
+}
+.names-wrap{position:relative;z-index:2;text-align:center;padding:clamp(20px,5vw,40px);}
+.names{
+  font-size:clamp(1.6rem,4vw,2.8rem);font-weight:300;color:var(--text);
+  letter-spacing:0.15em;animation:breathe 4s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1);opacity:0.9}
+  50%{transform:scale(1.06);opacity:1}
+}
+.subtitle{
+  margin-top:clamp(12px,2.5vw,24px);font-size:clamp(0.95rem,2vw,1.4rem);
+  color:var(--text-light);letter-spacing:0.2em;font-weight:300;
+  animation:breathe 4s ease-in-out .5s infinite;
+}
+.hint{
+  position:absolute;bottom:clamp(40px,10vh,80px);z-index:2;
+  font-size:clamp(0.8rem,1.6vw,1rem);color:var(--text-light);
+  letter-spacing:0.12em;cursor:pointer;
+  animation:hintPulse 2s ease-in-out infinite;
+}
+@keyframes hintPulse{
+  0%,100%{transform:translateY(0);opacity:0.6}
+  50%{transform:translateY(-8px);opacity:1}
+}
+.petal{
+  position:fixed;z-index:1000;pointer-events:none;width:14px;height:18px;
+  background:linear-gradient(180deg,#ffc0cb 0%,#f0a0b0 50%,#e08090 100%);
+  border-radius:50% 0 50% 0;
+  animation:petalFall var(--dur) ease-in var(--delay) both;opacity:0;
+}
+@keyframes petalFall{
+  0%{transform:translateY(-5vh) translateX(0) rotate(0deg);opacity:0}
+  5%{opacity:0.85}
+  50%{transform:translateY(55vh) translateX(var(--sway)) rotate(180deg);opacity:0.7}
+  100%{transform:translateY(105vh) translateX(var(--sway2)) rotate(var(--rot));opacity:0}
+}
+
+/* ===== Page 2: Gallery ===== */
+#page2{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,var(--cream),var(--pink),#faf5f8);
+}
+.carousel-stage{
+  position:relative;width:100%;max-width:700px;
+  height:clamp(320px,55vh,500px);perspective:1200px;
+  display:flex;align-items:center;justify-content:center;
+}
+.carousel-card{
+  position:absolute;width:clamp(220px,50vw,360px);height:clamp(260px,42vh,400px);
+  border-radius:var(--radius);overflow:hidden;
+  background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 8px 40px var(--shadow),0 2px 8px rgba(192,96,112,0.08);
+  transition:all .7s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;
+}
+.carousel-card .card-img-area{
+  width:100%;height:65%;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#fce4ec,#f8bbd0);
+  cursor:default;
+}
+.carousel-card .card-img-area img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.carousel-card .card-placeholder-img{
+  width:100%;height:100%;
+  background:linear-gradient(135deg,#fce4ec,#f3e5f5,#e8eaf6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:3rem;color:rgba(192,96,112,0.3);
+}
+.carousel-card .card-caption{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:12px 20px;font-size:clamp(0.85rem,1.4vw,1rem);
+  color:var(--text);letter-spacing:0.1em;text-align:center;
+}
+.carousel-card.active{z-index:3;transform:translateX(0) rotateY(0) scale(1);opacity:1;}
+.carousel-card.prev{
+  z-index:2;transform:translateX(clamp(-160px,-28vw,-100px)) rotateY(18deg) scale(0.85);opacity:0.55;
+}
+.carousel-card.next{
+  z-index:2;transform:translateX(clamp(100px,28vw,160px)) rotateY(-18deg) scale(0.85);opacity:0.55;
+}
+.carousel-card.hidden-left{
+  z-index:1;transform:translateX(clamp(-240px,-42vw,-160px)) rotateY(25deg) scale(0.7);opacity:0;pointer-events:none;
+}
+.carousel-card.hidden-right{
+  z-index:1;transform:translateX(clamp(160px,42vw,240px)) rotateY(-25deg) scale(0.7);opacity:0;pointer-events:none;
+}
+/* Edit mode card overlays */
+.card-upload-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,0.35);
+  display:none;align-items:center;justify-content:center;
+  color:#fff;font-size:0.9rem;letter-spacing:0.1em;cursor:pointer;
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.edit-mode .card-upload-overlay{display:flex;}
+.edit-mode .carousel-card .card-img-area{cursor:pointer}
+.card-delete-btn{
+  position:absolute;top:8px;right:8px;z-index:10;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,0.7);border:none;
+  color:#c06070;font-size:1rem;cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  line-height:1;transition:all .2s;
+}
+.edit-mode .card-delete-btn{display:flex;}
+.card-delete-btn:hover{background:#fff;transform:scale(1.1);}
+/* Add card button */
+.carousel-add-card{
+  position:absolute;width:clamp(180px,40vw,260px);height:clamp(200px,32vh,300px);
+  border-radius:var(--radius);border:2px dashed rgba(192,96,112,0.3);
+  display:none;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .3s;
+  background:rgba(255,255,255,0.35);z-index:4;
+  font-size:2rem;color:rgba(192,96,112,0.35);
+}
+.edit-mode .carousel-add-card{display:flex;}
+.carousel-add-card:hover{
+  background:rgba(255,255,255,0.6);border-color:rgba(192,96,112,0.5);
+  color:rgba(192,96,112,0.6);
+}
+
+.carousel-nav{display:flex;align-items:center;gap:clamp(16px,4vw,32px);margin-top:clamp(16px,3vh,28px);z-index:5;}
+.nav-arrow{
+  width:clamp(36px,6vw,44px);height:clamp(36px,6vw,44px);border-radius:50%;
+  border:1px solid rgba(192,96,112,0.25);background:rgba(255,255,255,0.5);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(1rem,1.6vw,1.3rem);color:var(--text);transition:all .3s;
+}
+.nav-arrow:hover{background:rgba(255,255,255,0.7);box-shadow:0 4px 16px var(--shadow)}
+.nav-arrow:active{transform:scale(0.92)}
+.carousel-dots{display:flex;gap:10px;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(192,96,112,0.3);cursor:pointer;transition:all .4s;}
+.dot.active{background:var(--text);width:24px;border-radius:4px;}
+.to-phrases-btn{
+  position:absolute;top:clamp(16px,3vh,28px);right:clamp(16px,3vw,28px);z-index:10;
+  padding:10px 22px;border-radius:20px;
+  border:1px solid rgba(192,96,112,0.25);background:rgba(255,255,255,0.55);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  color:var(--text);font-family:var(--font);font-size:clamp(0.78rem,1.2vw,0.9rem);
+  letter-spacing:0.08em;cursor:pointer;transition:all .35s;
+}
+.to-phrases-btn:hover{background:rgba(255,255,255,0.75);box-shadow:0 4px 20px var(--shadow-md)}
+
+/* ===== Page 3: Phrases Canvas ===== */
+#page3{background:linear-gradient(170deg,#fdf6f0,#fef9fb,#f5f0fa);}
+#phraseCanvas{position:absolute;top:0;left:0;width:100%;height:100%;display:block;}
+.phrase-title{
+  position:absolute;top:clamp(20px,4vh,40px);left:0;width:100%;text-align:center;
+  font-size:clamp(1.1rem,2.2vw,1.55rem);font-weight:300;letter-spacing:0.18em;
+  color:var(--text);z-index:2;pointer-events:none;
+}
+.to-essay-btn{
+  position:absolute;bottom:clamp(32px,7vh,56px);left:50%;transform:translateX(-50%);z-index:5;
+  padding:14px 40px;border-radius:28px;border:none;
+  background:linear-gradient(135deg,#e8a0b0,#d48090,#c06070);color:#fff;
+  font-family:var(--font);font-size:clamp(0.9rem,1.4vw,1.05rem);
+  font-weight:400;letter-spacing:0.12em;cursor:pointer;
+  box-shadow:0 6px 28px rgba(192,96,112,0.3);
+  animation:btnPulse 2.5s ease-in-out infinite;transition:all .35s;
+}
+.to-essay-btn:hover{box-shadow:0 8px 36px rgba(192,96,112,0.4);transform:translateX(-50%) translateY(-2px)}
+.to-essay-btn:active{transform:translateX(-50%) scale(0.95)}
+@keyframes btnPulse{
+  0%,100%{box-shadow:0 6px 28px rgba(192,96,112,0.3)}
+  50%{box-shadow:0 8px 40px rgba(192,96,112,0.45)}
+}
+
+/* ===== Page 4: Essay ===== */
+#page4{
+  background:linear-gradient(180deg,#fdf6f0,#fff0f0,#faf5f8);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+}
+.essay-back-btn{
+  position:fixed;top:clamp(14px,2.5vh,24px);left:clamp(14px,3vw,24px);z-index:10;
+  width:clamp(34px,5.5vw,42px);height:clamp(34px,5.5vw,42px);border-radius:50%;
+  border:1px solid rgba(192,96,112,0.22);background:rgba(255,255,255,0.5);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(1.1rem,1.6vw,1.3rem);color:var(--text);transition:all .3s;
+}
+.essay-back-btn:hover{background:rgba(255,255,255,0.7)}
+.essay-container{
+  display:flex;justify-content:center;
+  padding:clamp(60px,12vh,100px) clamp(14px,3vw,24px) clamp(50px,10vh,80px);
+  min-height:100%;
+}
+.essay-card{
+  width:100%;max-width:680px;background:rgba(255,255,255,0.5);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border-radius:var(--radius);padding:clamp(28px,5vw,48px) clamp(22px,4vw,40px);
+  box-shadow:0 8px 48px var(--shadow),0 2px 8px rgba(192,96,112,0.06);
+}
+.essay-title{
+  text-align:center;font-size:clamp(1.3rem,2.4vw,1.8rem);font-weight:300;
+  letter-spacing:0.16em;color:var(--text);margin-bottom:8px;
+}
+.essay-date{
+  text-align:center;font-size:clamp(0.8rem,1.2vw,0.9rem);color:var(--text-light);
+  letter-spacing:0.1em;margin-bottom:clamp(24px,4vh,40px);
+}
+.essay-intro{
+  text-align:center;font-style:italic;font-size:clamp(0.9rem,1.3vw,1rem);
+  color:var(--text-light);letter-spacing:0.08em;line-height:2;
+  margin-bottom:clamp(24px,4vh,36px);
+}
+.essay-body p{
+  text-indent:2em;line-height:2.2;font-size:clamp(0.88rem,1.25vw,0.98rem);
+  color:var(--text);letter-spacing:0.06em;margin-bottom:clamp(10px,1.5vh,16px);
+}
+.essay-signature{
+  margin-top:clamp(28px,5vh,44px);text-align:right;
+  font-size:clamp(0.9rem,1.2vw,1rem);color:var(--text);letter-spacing:0.12em;line-height:2;
+}
+
+/* ===== Edit Mode Styles ===== */
+/* Editable highlight */
+.edit-mode .editable{
+  outline:1.5px dashed rgba(192,96,112,0.3);outline-offset:4px;
+  border-radius:6px;cursor:text;transition:outline .2s;
+}
+.edit-mode .editable:hover{outline-color:rgba(192,96,112,0.55)}
+.edit-mode .editable:focus{outline:2px solid rgba(192,96,112,0.5);background:rgba(255,255,255,0.3)}
+
+/* Edit toggle (bottom-left, subtle) */
+.edit-toggle{
+  position:fixed;bottom:clamp(12px,2vh,20px);left:clamp(12px,2vw,20px);z-index:9999;
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(192,96,112,0.2);background:rgba(255,255,255,0.45);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:rgba(192,96,112,0.45);transition:all .3s;
+}
+.edit-toggle:hover{color:rgba(192,96,112,0.75);border-color:rgba(192,96,112,0.4);background:rgba(255,255,255,0.7)}
+
+/* Edit toolbar */
+.edit-toolbar{
+  position:fixed;bottom:clamp(12px,2vh,20px);left:50%;transform:translateX(-50%);z-index:9998;
+  display:none;gap:8px;padding:8px 14px;border-radius:24px;
+  background:rgba(255,255,255,0.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(192,96,112,0.2);box-shadow:0 4px 24px rgba(192,96,112,0.12);
+  flex-wrap:wrap;justify-content:center;
+}
+.edit-mode .edit-toolbar{display:flex;}
+.edit-toolbar button{
+  padding:8px 16px;border-radius:18px;border:1px solid rgba(192,96,112,0.2);
+  background:rgba(255,255,255,0.6);color:var(--text);
+  font-family:var(--font);font-size:0.8rem;letter-spacing:0.06em;
+  cursor:pointer;transition:all .25s;white-space:nowrap;
+}
+.edit-toolbar button:hover{background:rgba(255,255,255,0.9);border-color:rgba(192,96,112,0.4)}
+.edit-toolbar .btn-primary{background:var(--text);color:#fff;border-color:var(--text)}
+.edit-toolbar .btn-primary:hover{background:var(--text-dark)}
+.edit-toolbar .btn-danger{color:#c06070;border-color:rgba(192,96,112,0.3)}
+.edit-toolbar .btn-danger:hover{background:rgba(192,96,112,0.08)}
+
+/* Phrases editor modal */
+.modal-overlay{
+  position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,0.3);display:none;
+  align-items:center;justify-content:center;
+}
+.modal-overlay.show{display:flex;}
+.modal-box{
+  width:90%;max-width:560px;max-height:80vh;
+  background:rgba(255,255,255,0.9);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-radius:20px;padding:28px 24px;box-shadow:0 16px 56px rgba(0,0,0,0.15);
+  display:flex;flex-direction:column;gap:16px;
+}
+.modal-box h3{font-weight:400;color:var(--text);font-size:1.1rem;text-align:center;letter-spacing:0.1em}
+.modal-box textarea{
+  width:100%;height:clamp(260px,50vh,400px);
+  border:1px solid rgba(192,96,112,0.2);border-radius:12px;
+  padding:14px;font-family:var(--font);font-size:0.85rem;
+  line-height:1.8;color:var(--text);resize:vertical;
+  background:rgba(255,255,255,0.6);outline:none;
+}
+.modal-box textarea:focus{border-color:rgba(192,96,112,0.4)}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.modal-btns button{
+  padding:10px 24px;border-radius:16px;border:1px solid rgba(192,96,112,0.2);
+  background:rgba(255,255,255,0.7);color:var(--text);
+  font-family:var(--font);font-size:0.85rem;cursor:pointer;transition:all .25s;
+}
+.modal-btns .btn-save{background:var(--text);color:#fff;border-color:var(--text)}
+.modal-btns .btn-save:hover{background:var(--text-dark)}
+
+/* Toast */
+#toast{
+  position:fixed;top:clamp(20px,4vh,40px);left:50%;transform:translateX(-50%);z-index:99999;
+  padding:10px 28px;border-radius:20px;background:rgba(192,96,112,0.88);color:#fff;
+  font-family:var(--font);font-size:0.85rem;letter-spacing:0.08em;
+  opacity:0;visibility:hidden;transition:all .35s;
+  pointer-events:none;
+}
+#toast.show{opacity:1;visibility:visible}
+
+/* ===== Responsive ===== */
+@media (max-width:600px){
+  .carousel-card{width:clamp(180px,62vw,260px);height:clamp(220px,38vh,320px)}
+  .essay-card{padding:24px 18px}
+  .to-phrases-btn{padding:8px 16px;font-size:0.78rem}
+  .ring{display:none}
+  .ring:nth-child(3){display:block;width:160px;height:160px}
+  .edit-toolbar{gap:5px;padding:6px 10px}
+  .edit-toolbar button{padding:6px 12px;font-size:0.72rem}
+}
+@media (min-width:1200px){
+  .carousel-stage{max-width:800px;height:540px}
+  .carousel-card{width:380px;height:440px}
+}
+</style>
+</head>
+<body>
+
+<!-- Hidden audio element -->
+<audio id="bgm" src="./music/anniversary-bgm.mp3" loop preload="auto"></audio>
+
+<!-- Hidden file input for image upload -->
+<input type="file" id="imgUploadInput" accept="image/*" style="display:none">
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Edit toggle -->
+<button class="edit-toggle" id="editToggle" title="编辑模式">&#9998;</button>
+
+<!-- Edit toolbar -->
+<div class="edit-toolbar" id="editToolbar">
+  <button id="tbAddPhoto">+ 添加照片</button>
+  <button id="tbEditPhrases">编辑短句</button>
+  <button class="btn-primary" id="tbExport">导出页面</button>
+  <button class="btn-danger" id="tbReset">重置全部</button>
+  <button id="tbExitEdit">退出编辑</button>
+</div>
+
+<!-- Phrases editor modal -->
+<div class="modal-overlay" id="phrasesModal">
+  <div class="modal-box">
+    <h3>编辑短句（一行一句，共100句）</h3>
+    <textarea id="phrasesTextarea" spellcheck="false"></textarea>
+    <div class="modal-btns">
+      <button id="modalCancel">取消</button>
+      <button class="btn-save" id="modalSave">保存并刷新</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE 1: Opening ==================== -->
+<div class="page active" id="page1">
+  <div class="page1-bg"></div>
+
+  <div class="orb" style="width:clamp(100px,18vw,180px);height:clamp(100px,18vw,180px);background:rgba(255,182,193,0.4);top:15%;left:10%;--dur:8s;--delay:0s;--dx1:40px;--dy1:-30px;--dx2:-30px;--dy2:50px;--dx3:20px;--dy3:-40px"></div>
+  <div class="orb" style="width:clamp(120px,20vw,200px);height:clamp(120px,20vw,200px);background:rgba(200,180,220,0.35);top:55%;right:8%;--dur:10s;--delay:-2s;--dx1:-50px;--dy1:20px;--dx2:40px;--dy2:-35px;--dx3:-25px;--dy3:45px"></div>
+  <div class="orb" style="width:clamp(80px,14vw,150px);height:clamp(80px,14vw,150px);background:rgba(220,200,180,0.3);bottom:12%;left:20%;--dur:9s;--delay:-4s;--dx1:30px;--dy1:-45px;--dx2:-40px;--dy2:25px;--dx3:35px;--dy3:-20px"></div>
+  <div class="orb" style="width:clamp(90px,16vw,160px);height:clamp(90px,16vw,160px);background:rgba(210,190,210,0.35);top:25%;right:18%;--dur:11s;--delay:-1s;--dx1:-35px;--dy1:40px;--dx2:45px;--dy2:-30px;--dx3:-20px;--dy3:35px"></div>
+
+  <div class="ring" style="width:clamp(140px,22vw,240px);height:clamp(140px,22vw,240px);top:12%;left:18%;--dur:30s"></div>
+  <div class="ring" style="width:clamp(100px,16vw,180px);height:clamp(100px,16vw,180px);bottom:20%;right:14%;--dur:24s"></div>
+
+  <div class="names-wrap">
+    <h1 class="names editable" id="edNames">周雁斌 &amp; 管陈晶晶</h1>
+    <p class="subtitle editable" id="edSubtitle">五 周 年 纪 念 日</p>
+  </div>
+
+  <div class="hint" id="openHint">轻触开启 · 我们的故事</div>
+</div>
+
+<!-- ==================== PAGE 2: Gallery ==================== -->
+<div class="page" id="page2">
+  <button class="to-phrases-btn" id="toPhrasesBtn">进入文字世界 →</button>
+
+  <div class="carousel-stage" id="carouselStage">
+    <!-- Cards injected by JS -->
+  </div>
+
+  <div class="carousel-nav">
+    <button class="nav-arrow" id="prevBtn" aria-label="上一张">&#10094;</button>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <button class="nav-arrow" id="nextBtn" aria-label="下一张">&#10095;</button>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: Phrases Canvas ==================== -->
+<div class="page" id="page3">
+  <h2 class="phrase-title">五 年 · 一 百 个 心 动 瞬 间</h2>
+  <canvas id="phraseCanvas"></canvas>
+  <button class="to-essay-btn" id="toEssayBtn">读完我们的故事</button>
+</div>
+
+<!-- ==================== PAGE 4: Essay ==================== -->
+<div class="page" id="page4">
+  <button class="essay-back-btn" id="essayBackBtn">←</button>
+
+  <div class="essay-container">
+    <div class="essay-card">
+      <h1 class="essay-title editable" id="edEssayTitle">致我们的五年</h1>
+      <p class="essay-date editable" id="edEssayDate">二〇二六年 · 初夏</p>
+      <div class="essay-intro editable" id="edEssayIntro">
+        五年前的今天，两颗心开始靠近。<br>
+        一千八百多个日夜，每一个瞬间都值得被铭记。
+      </div>
+      <div class="essay-body editable" id="edEssayBody">
+        <p>亲爱的晶晶，写下这些字的时候，窗外正下着初夏的雨。雨声很轻，像五年前我们第一次见面时，我胸腔里那个同样轻轻跳动着的声音——它说，就是她了。</p>
+        <p>五年。这个词从舌尖滑过的时候，带着一种沉甸甸的温柔。1825天，是我们一起走过的日子。我还记得第一年我们对彼此的小心翼翼，像两只刚认识的小动物，试探着靠近，又怕惊扰了对方。第二年开始，我们慢慢褪去了最初的拘谨，开始在对方的生活里生根。第三年，习惯了醒来第一眼看到你，习惯了你的气息成为我的空气。第四年，我们经历了争吵与和解，在眼泪和笑声里把彼此锤得更近。而第五年——第五年是确认，确认你就是我要共度余生的那个人。</p>
+        <p>有人说，爱情最好的模样，是相处不累。和你在一起，我可以是全部的我自己。开心的、沮丧的、幼稚的、认真的——每一个版本的我，都被你稳稳接住。而我也想把最好的自己给你，在你疲惫时做你的港湾，在你迷茫时做你的星光。</p>
+        <p>五年前我们在彼此的生命里种下一颗种子，五年后它已经长成了一棵树。树上开着我们共同浇灌的花——第一次旅行的兴奋，深夜长谈的安心，一起下厨的手忙脚乱，还有无数个平凡却踏实的黄昏。这些花，每一朵都叫"记得"。</p>
+        <p>谢谢你，在这五年里包容我的笨拙和沉默。谢谢你，让我相信爱情可以是一件安静而笃定的事，不需要轰轰烈烈，只需要每天早上的一杯温水，过马路时伸过来的手，和睡前最后一句晚安。</p>
+        <p>未来还有很多个五年。我想和你一起去更远的地方，看你没看过的风景，吃你没吃过的东西，在你笑的时候偷偷看你眼角的弧度。我想和你一起变老，在白发苍苍的时候还能牵着手散步，还能在对方眼里看到最初的光。</p>
+        <p>五周年快乐，晶晶。我们的故事，才刚刚开始。</p>
+      </div>
+      <div class="essay-signature editable" id="edEssaySig">
+        永远爱你的<br>雁斌
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   DATA MANAGER — localStorage persistence
+   ================================================================ */
+const LS = {
+  _defaults: {
+    names: '周雁斌 & 管陈晶晶',
+    subtitle: '五 周 年 纪 念 日',
+    gallery: [
+      { src: './images/photo1.jpg', caption: '我们的第一张合影' },
+      { src: './images/photo2.jpg', caption: '那天的阳光很好' },
+      { src: './images/photo3.jpg', caption: '一起看过的海' },
+      { src: './images/photo4.jpg', caption: '你笑起来的模样' },
+      { src: './images/photo5.jpg', caption: '属于我们的城市' },
+      { src: './images/photo6.jpg', caption: '最温柔的侧脸' },
+    ],
+    phrases: [
+      '初见你时心动','你的名字很美','第一次牵你的手','记得你说过的',
+      '和你一起看日落','你的笑容好暖','听你说晚安','一起走过的路',
+      '你是我的光','想和你去远方','五年前的今天','那个夏天有你',
+      '你眼里的星星','偷偷看你的侧脸','心跳漏了一拍','有你在就安心',
+      '喜欢你喊我名字','一起淋过的雨','你煮的面最好吃','陪你熬夜聊天',
+      '第一次拥抱','你身上的香味','发消息给你时','等你的回复',
+      '你说你想我了','我也是啊','一起看电影','你靠在我肩上',
+      '为你的笑心动','和你一起做梦','手心传递的温度','你偷偷看我',
+      '全世界都安静了','只想和你在一起','你认真的样子','像是发着光',
+      '一起逛超市','你说这个好看','我帮你拿着','很小的事也开心',
+      '你是我的人间','也是最温柔的','和你在一起时','时间总不够用',
+      '想和你慢慢变老','在阳台种花给你','每天的早安晚安','从没断过',
+      '你生气也可爱','哄你的时候','你嘴角偷笑了','我就知道好了',
+      '一起许下的愿','会一个个实现','你是最好的你','我也是最好的我',
+      '和你一起吃饭','聊今天的琐碎','很普通的事','都变得有意义',
+      '你枕着我的手臂','睡得很香','我不敢动','怕吵醒你',
+      '第一次对你说爱','你愣了一下','然后笑了','那个瞬间好美',
+      '五年像一首诗','每一个字都是你','往后还有很多年','我们慢慢写',
+      '陪你去看世界','哪里都好','有你在的地方','就是目的地',
+      '你是我的心安','也是我的勇敢','因为你','我变成了更好的人',
+      '喜欢和你并肩走','不用说话','也知道彼此在想','这就是默契',
+      '谢谢你选择了我','在那么多的人里','未来的每一天','请多指教',
+      '我们的故事很长','一百句也不够说','但是没关系','还有一生慢慢讲',
+      '阳光正好你在身旁','微风轻拂你的发梢','与你一起虚度时光','即是世间最好浪漫',
+    ],
+    essayTitle: '致我们的五年',
+    essayDate: '二〇二六年 · 初夏',
+    essayIntro: '五年前的今天，两颗心开始靠近。<br>一千八百多个日夜，每一个瞬间都值得被铭记。',
+    essayBody: [
+      '亲爱的晶晶，写下这些字的时候，窗外正下着初夏的雨。雨声很轻，像五年前我们第一次见面时，我胸腔里那个同样轻轻跳动着的声音——它说，就是她了。',
+      '五年。这个词从舌尖滑过的时候，带着一种沉甸甸的温柔。1825天，是我们一起走过的日子。我还记得第一年我们对彼此的小心翼翼，像两只刚认识的小动物，试探着靠近，又怕惊扰了对方。第二年开始，我们慢慢褪去了最初的拘谨，开始在对方的生活里生根。第三年，习惯了醒来第一眼看到你，习惯了你的气息成为我的空气。第四年，我们经历了争吵与和解，在眼泪和笑声里把彼此锤得更近。而第五年——第五年是确认，确认你就是我要共度余生的那个人。',
+      '有人说，爱情最好的模样，是相处不累。和你在一起，我可以是全部的我自己。开心的、沮丧的、幼稚的、认真的——每一个版本的我，都被你稳稳接住。而我也想把最好的自己给你，在你疲惫时做你的港湾，在你迷茫时做你的星光。',
+      '五年前我们在彼此的生命里种下一颗种子，五年后它已经长成了一棵树。树上开着我们共同浇灌的花——第一次旅行的兴奋，深夜长谈的安心，一起下厨的手忙脚乱，还有无数个平凡却踏实的黄昏。这些花，每一朵都叫"记得"。',
+      '谢谢你，在这五年里包容我的笨拙和沉默。谢谢你，让我相信爱情可以是一件安静而笃定的事，不需要轰轰烈烈，只需要每天早上的一杯温水，过马路时伸过来的手，和睡前最后一句晚安。',
+      '未来还有很多个五年。我想和你一起去更远的地方，看你没看过的风景，吃你没吃过的东西，在你笑的时候偷偷看你眼角的弧度。我想和你一起变老，在白发苍苍的时候还能牵着手散步，还能在对方眼里看到最初的光。',
+      '五周年快乐，晶晶。我们的故事，才刚刚开始。',
+    ],
+    essaySig: '永远爱你的<br>雁斌',
+  },
+
+  load() {
+    const data = {};
+    for (const key of Object.keys(this._defaults)) {
+      const stored = localStorage.getItem('anniv_' + key);
+      if (stored !== null) {
+        try { data[key] = JSON.parse(stored); } catch(e) { data[key] = stored; }
+      } else {
+        data[key] = this._defaults[key];
+      }
+    }
+    return data;
+  },
+
+  save(key, value) {
+    localStorage.setItem('anniv_' + key, JSON.stringify(value));
+  },
+
+  resetAll() {
+    for (const key of Object.keys(this._defaults)) {
+      localStorage.removeItem('anniv_' + key);
+    }
+  },
+
+  exportData() { return this.load(); },
+};
+
+// Load all data at init
+let appData = LS.load();
+
+/* ================================================================
+   EDIT MODE
+   ================================================================ */
+let editMode = false;
+const editToggle = document.getElementById('editToggle');
+const editToolbar = document.getElementById('editToolbar');
+
+function setEditMode(on) {
+  editMode = on;
+  document.body.classList.toggle('edit-mode', on);
+  editToggle.textContent = on ? '✕' : '✎';
+  if (!on) {
+    // Save essay content on exit
+    saveEssayFromDOM();
+    // Save page 1 names
+    LS.save('names', document.getElementById('edNames').textContent.trim());
+    LS.save('subtitle', document.getElementById('edSubtitle').textContent.trim());
+    appData = LS.load();
+  }
+  // Update gallery to show/hide edit UI
+  buildCarousel();
+  updateCarousel();
+}
+
+editToggle.addEventListener('click', () => setEditMode(!editMode));
+document.getElementById('tbExitEdit').addEventListener('click', () => setEditMode(false));
+
+/* ================================================================
+   TOAST
+   ================================================================ */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+/* ================================================================
+   IMAGE UPLOAD
+   ================================================================ */
+const imgUploadInput = document.getElementById('imgUploadInput');
+let pendingImgIndex = null; // which gallery index to replace
+
+function compressImage(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxW = 800;
+        let w = img.width, h = img.height;
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function triggerImageUpload(index) {
+  pendingImgIndex = index;
+  imgUploadInput.click();
+}
+
+imgUploadInput.addEventListener('change', async () => {
+  const file = imgUploadInput.files[0];
+  if (!file) return;
+  showToast('正在处理图片...');
+  const dataUrl = await compressImage(file);
+  if (pendingImgIndex !== null && pendingImgIndex < appData.gallery.length) {
+    appData.gallery[pendingImgIndex].src = dataUrl;
+  }
+  LS.save('gallery', appData.gallery);
+  buildCarousel();
+  updateCarousel();
+  pendingImgIndex = null;
+  imgUploadInput.value = '';
+  showToast('图片已替换');
+});
+
+/* ================================================================
+   GALLERY CAROUSEL
+   ================================================================ */
+let activeIndex = 0;
+const carouselStage = document.getElementById('carouselStage');
+const carouselDotsEl = document.getElementById('carouselDots');
+
+function buildCarousel() {
+  carouselStage.innerHTML = '';
+  carouselDotsEl.innerHTML = '';
+
+  appData.gallery.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'carousel-card';
+    const isDataUrl = item.src && item.src.startsWith('data:');
+    card.innerHTML = `
+      <div class="card-img-area" data-index="${i}">
+        ${item.src && !isDataUrl ? `<img src="${item.src}" alt="${item.caption}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.card-placeholder-img').style.display='flex'">` : ''}
+        ${isDataUrl ? `<img src="${item.src}" alt="${item.caption}" loading="lazy">` : ''}
+        ${!item.src || !isDataUrl ? `<div class="card-placeholder-img" style="${isDataUrl ? 'display:none' : (item.src ? 'display:none' : 'display:flex')}">💗</div>` : ''}
+        <div class="card-upload-overlay">📷 点击替换图片</div>
+        <button class="card-delete-btn" data-index="${i}">×</button>
+      </div>
+      <div class="card-caption">${item.caption}</div>
+    `;
+    // Click image area to upload (edit mode only)
+    card.querySelector('.card-img-area').addEventListener('click', function(e) {
+      if (!editMode) return;
+      if (e.target.closest('.card-delete-btn')) return;
+      triggerImageUpload(i);
+    });
+    // Delete button
+    card.querySelector('.card-delete-btn').addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (appData.gallery.length <= 1) { showToast('至少保留一张照片'); return; }
+      appData.gallery.splice(i, 1);
+      LS.save('gallery', appData.gallery);
+      if (activeIndex >= appData.gallery.length) activeIndex = appData.gallery.length - 1;
+      buildCarousel();
+      updateCarousel();
+      showToast('照片已删除');
+    });
+    // Edit caption on double-click (even in non-edit mode, but more discoverable in edit mode)
+    card.querySelector('.card-caption').addEventListener('dblclick', function() {
+      if (!editMode) return;
+      const el = this;
+      el.contentEditable = 'true';
+      el.focus();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    });
+    card.querySelector('.card-caption').addEventListener('blur', function() {
+      if (!editMode) return;
+      this.contentEditable = 'false';
+      const newCaption = this.textContent.trim();
+      if (newCaption && newCaption !== appData.gallery[i].caption) {
+        appData.gallery[i].caption = newCaption;
+        LS.save('gallery', appData.gallery);
+      }
+    });
+
+    carouselStage.appendChild(card);
+
+    // Dot
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.addEventListener('click', () => goToSlide(i));
+    carouselDotsEl.appendChild(dot);
+  });
+
+  // Add-card button (edit mode only)
+  const addCard = document.createElement('div');
+  addCard.className = 'carousel-add-card';
+  addCard.textContent = '+';
+  addCard.title = '添加新照片';
+  addCard.addEventListener('click', () => {
+    triggerImageUpload(-1); // -1 means add new
+  });
+  carouselStage.appendChild(addCard);
+}
+
+// Override triggerImageUpload for "add new" case
+const origTrigger = triggerImageUpload;
+triggerImageUpload = function(index) {
+  if (index === -1) {
+    // Add mode: create placeholder, then upload
+    pendingImgIndex = appData.gallery.length;
+    appData.gallery.push({ src: '', caption: '新照片' });
+    LS.save('gallery', appData.gallery);
+    buildCarousel();
+    updateCarousel();
+    activeIndex = appData.gallery.length - 1;
+    updateCarousel();
+    imgUploadInput.click();
+    return;
+  }
+  origTrigger(index);
+};
+
+function updateCarousel() {
+  const cards = carouselStage.querySelectorAll('.carousel-card');
+  const dots = carouselDotsEl.querySelectorAll('.dot');
+  const n = appData.gallery.length;
+
+  cards.forEach((card, i) => {
+    card.classList.remove('active','prev','next','hidden-left','hidden-right');
+    const offset = i - activeIndex;
+    let wrapped = offset;
+    if (offset > n/2) wrapped = offset - n;
+    if (offset < -n/2) wrapped = offset + n;
+
+    if (wrapped === 0) card.classList.add('active');
+    else if (wrapped === -1 || wrapped === n - 1) card.classList.add('prev');
+    else if (wrapped === 1 || wrapped === -(n - 1)) card.classList.add('next');
+    else if (wrapped < -1) card.classList.add('hidden-left');
+    else if (wrapped > 1) card.classList.add('hidden-right');
+  });
+
+  dots.forEach((d, i) => d.classList.toggle('active', i === activeIndex));
+}
+
+function goToSlide(i) {
+  activeIndex = ((i % appData.gallery.length) + appData.gallery.length) % appData.gallery.length;
+  updateCarousel();
+}
+
+document.getElementById('prevBtn').addEventListener('click', () => goToSlide(activeIndex - 1));
+document.getElementById('nextBtn').addEventListener('click', () => goToSlide(activeIndex + 1));
+
+// Touch swipe
+let touchStartX = 0;
+carouselStage.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, {passive:true});
+carouselStage.addEventListener('touchend', (e) => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) goToSlide(activeIndex + (diff > 0 ? 1 : -1));
+});
+
+// Keyboard
+document.addEventListener('keydown', (e) => {
+  if (currentPage !== 2) return;
+  if (e.key === 'ArrowLeft') goToSlide(activeIndex - 1);
+  if (e.key === 'ArrowRight') goToSlide(activeIndex + 1);
+});
+
+// Add photo button in toolbar
+document.getElementById('tbAddPhoto').addEventListener('click', () => {
+  if (currentPage !== 2) goToPage(2);
+  setTimeout(() => triggerImageUpload(-1), 400);
+});
+
+/* ================================================================
+   PHRASES EDITOR MODAL
+   ================================================================ */
+const phrasesModal = document.getElementById('phrasesModal');
+const phrasesTextarea = document.getElementById('phrasesTextarea');
+
+document.getElementById('tbEditPhrases').addEventListener('click', () => {
+  phrasesTextarea.value = appData.phrases.join('\n');
+  phrasesModal.classList.add('show');
+});
+
+document.getElementById('modalCancel').addEventListener('click', () => {
+  phrasesModal.classList.remove('show');
+});
+
+document.getElementById('modalSave').addEventListener('click', () => {
+  const lines = phrasesTextarea.value.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+  if (lines.length < 10) { showToast('至少需要10条短句'); return; }
+  appData.phrases = lines;
+  LS.save('phrases', appData.phrases);
+  phrasesModal.classList.remove('show');
+  if (currentPage === 3) { stopCanvas(); startCanvas(); }
+  showToast('短句已更新 (' + appData.phrases.length + '条)');
+});
+
+// Close modal on overlay click
+phrasesModal.addEventListener('click', (e) => {
+  if (e.target === phrasesModal) phrasesModal.classList.remove('show');
+});
+
+/* ================================================================
+   EXPORT
+   ================================================================ */
+document.getElementById('tbExport').addEventListener('click', () => {
+  // Save current state first
+  saveEssayFromDOM();
+  LS.save('names', document.getElementById('edNames').textContent.trim());
+  LS.save('subtitle', document.getElementById('edSubtitle').textContent.trim());
+  appData = LS.load();
+
+  const data = appData;
+
+  // Build fresh _defaults object with current data
+  const defaultsLiteral = JSON.stringify({
+    names: data.names,
+    subtitle: data.subtitle,
+    gallery: data.gallery,
+    phrases: data.phrases,
+    essayTitle: data.essayTitle,
+    essayDate: data.essayDate,
+    essayIntro: data.essayIntro,
+    essayBody: data.essayBody,
+    essaySig: data.essaySig,
+  }, null, 4);
+
+  // Get page source and bake in current data
+  let html = document.documentElement.outerHTML;
+
+  // Strip edit-only UI elements
+  html = html.replace(/<button class="edit-toggle"[^>]*>.*?<\/button>/s, '');
+  html = html.replace(/<div class="edit-toolbar"[^>]*>.*?<\/div>/s, '');
+  html = html.replace(/<div class="modal-overlay"[^>]*>[\s\S]*?<\/div>\s*<\/div>/s, '');
+  html = html.replace(/<input type="file"[^>]*>\s*/s, '');
+  html = html.replace(/<div id="toast">[\s\S]*?<\/div>\s*/s, '');
+
+  // Strip edit-mode CSS block
+  html = html.replace(/\/\* ===== Edit Mode Styles ===== \*\/[\s\S]*?\n\}/, '');
+  html = html.replace(/\n\.edit-mode\s*\.editable[\s\S]*?\n\}/g, '');
+  html = html.replace(/\n\.edit-mode\s*\.card-upload-overlay[\s\S]*?\n\}/g, '');
+  html = html.replace(/\n\.edit-mode\s*\.carousel-card \.card-img-area[\s\S]*?\n\}/g, '');
+  html = html.replace(/\n\.edit-mode\s*\.card-delete-btn[\s\S]*?\n\}/g, '');
+  html = html.replace(/\n\.edit-mode\s*\.carousel-add-card[\s\S]*?\n\}/g, '');
+
+  // Replace _defaults object with current data (key step)
+  html = html.replace(/_defaults:\s*\{[\s\S]*?\n  \},\n\n  load\(\)/,
+    '_defaults: ' + defaultsLiteral + ',\n\n  load()');
+
+  // Remove editable classes from HTML elements
+  html = html.replace(/\s*editable="true"/g, '');
+  html = html.replace(/\sclass="([^"]*)?editable([^"]*)?"/g,
+    (m, a, b) => { const c = ((a||'')+(b||'')).replace(/\s+/g,' ').trim(); return c ? ` class="${c}"` : ''; });
+  html = html.replace(/\scontenteditable="[^"]*"/g, '');
+
+  // Download
+  const blob = new Blob(['<!DOCTYPE html>\n' + html.replace('<!DOCTYPE html>\n', '')], { type: 'text/html;charset=UTF-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'anniversary-' + new Date().toISOString().slice(0,10) + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('页面已导出');
+});
+
+/* ================================================================
+   RESET
+   ================================================================ */
+document.getElementById('tbReset').addEventListener('click', () => {
+  if (!confirm('确定要重置所有修改吗？这将清除所有编辑内容，恢复为默认状态。')) return;
+  LS.resetAll();
+  appData = LS.load();
+  // Restore DOM
+  document.getElementById('edNames').textContent = appData.names;
+  document.getElementById('edSubtitle').textContent = appData.subtitle;
+  document.getElementById('edEssayTitle').textContent = appData.essayTitle;
+  document.getElementById('edEssayDate').textContent = appData.essayDate;
+  document.getElementById('edEssayIntro').innerHTML = appData.essayIntro;
+  document.getElementById('edEssayBody').innerHTML = appData.essayBody.map(p => `<p>${p}</p>`).join('');
+  document.getElementById('edEssaySig').innerHTML = appData.essaySig;
+  buildCarousel();
+  updateCarousel();
+  activeIndex = 0;
+  updateCarousel();
+  if (currentPage === 3) { stopCanvas(); startCanvas(); }
+  showToast('已恢复默认');
+});
+
+/* ================================================================
+   ESSAY EDITING — Auto-save on blur
+   ================================================================ */
+function saveEssayFromDOM() {
+  appData.essayTitle = document.getElementById('edEssayTitle').textContent.trim();
+  appData.essayDate = document.getElementById('edEssayDate').textContent.trim();
+  appData.essayIntro = document.getElementById('edEssayIntro').innerHTML.trim();
+  const bodyEl = document.getElementById('edEssayBody');
+  appData.essayBody = Array.from(bodyEl.querySelectorAll('p')).map(p => p.textContent.trim()).filter(t => t);
+  appData.essaySig = document.getElementById('edEssaySig').innerHTML.trim();
+  LS.save('essayTitle', appData.essayTitle);
+  LS.save('essayDate', appData.essayDate);
+  LS.save('essayIntro', appData.essayIntro);
+  LS.save('essayBody', appData.essayBody);
+  LS.save('essaySig', appData.essaySig);
+}
+
+// Apply loaded essay data to DOM
+function applyEssayData() {
+  document.getElementById('edEssayTitle').textContent = appData.essayTitle;
+  document.getElementById('edEssayDate').textContent = appData.essayDate;
+  document.getElementById('edEssayIntro').innerHTML = appData.essayIntro;
+  document.getElementById('edEssayBody').innerHTML = appData.essayBody.map(p => `<p>${p}</p>`).join('');
+  document.getElementById('edEssaySig').innerHTML = appData.essaySig;
+}
+
+// Auto-save essay on any change (debounced)
+let essaySaveTimeout;
+['edEssayTitle','edEssayDate','edEssayIntro','edEssayBody','edEssaySig'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    clearTimeout(essaySaveTimeout);
+    essaySaveTimeout = setTimeout(() => {
+      saveEssayFromDOM();
+      showToast('已自动保存');
+    }, 1500);
+  });
+  el.addEventListener('blur', () => {
+    clearTimeout(essaySaveTimeout);
+    saveEssayFromDOM();
+  });
+});
+
+// Page 1 names auto-save
+['edNames','edSubtitle'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('blur', () => {
+    LS.save('names', document.getElementById('edNames').textContent.trim());
+    LS.save('subtitle', document.getElementById('edSubtitle').textContent.trim());
+    appData = LS.load();
+  });
+});
+
+/* ================================================================
+   PAGE NAVIGATION
+   ================================================================ */
+let currentPage = 1;
+function goToPage(n) {
+  const prev = document.getElementById('page' + currentPage);
+  const next = document.getElementById('page' + n);
+  if (!prev || !next || currentPage === n) return;
+
+  if (currentPage === 3) stopCanvas();
+
+  prev.classList.remove('active');
+  next.classList.add('active');
+  currentPage = n;
+
+  if (n === 3) startCanvas();
+  if (n === 4) document.getElementById('page4').scrollTop = 0;
+}
+
+/* ================================================================
+   AUDIO
+   ================================================================ */
+let audioStarted = false;
+const bgm = document.getElementById('bgm');
+function startAudio() {
+  if (audioStarted) return;
+  bgm.volume = 0.4;
+  bgm.play().then(() => { audioStarted = true; }).catch(() => {});
+}
+
+/* ================================================================
+   PETALS
+   ================================================================ */
+function spawnPetals() {
+  const colors = [
+    'linear-gradient(180deg,#ffc0cb,#f0a0b0,#e08090)',
+    'linear-gradient(180deg,#ffd1d9,#f5b0be,#e595a0)',
+    'linear-gradient(180deg,#ffe0e5,#f8c0ca,#e8a0aa)',
+    'linear-gradient(180deg,#fce4ec,#f0c0cc,#e0a0b0)',
+    'linear-gradient(180deg,#ffcdd2,#f0a8b0,#e09098)',
+  ];
+  for (let i = 0; i < 20; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'petal';
+    petal.style.left = Math.random() * 96 + '%';
+    petal.style.setProperty('--dur', (2.5 + Math.random() * 3) + 's');
+    petal.style.setProperty('--delay', Math.random() * 0.8 + 's');
+    petal.style.setProperty('--sway', (Math.random() * 60 - 30) + 'px');
+    petal.style.setProperty('--sway2', (Math.random() * 40 - 20) + 'px');
+    petal.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+    petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+    petal.style.width = (10 + Math.random() * 12) + 'px';
+    petal.style.height = (14 + Math.random() * 14) + 'px';
+    document.body.appendChild(petal);
+    const dur = parseFloat(petal.style.getPropertyValue('--dur'));
+    const delay = parseFloat(petal.style.getPropertyValue('--delay'));
+    setTimeout(() => petal.remove(), (dur + delay) * 1000 + 200);
+  }
+}
+
+/* ================================================================
+   PAGE 1 CLICK
+   ================================================================ */
+document.getElementById('openHint').addEventListener('click', () => {
+  startAudio(); spawnPetals(); setTimeout(() => goToPage(2), 1000);
+});
+document.getElementById('page1').addEventListener('click', function(e) {
+  if (e.target === this || e.target.closest('.page1-bg,.names-wrap,.orb,.ring')) {
+    startAudio(); spawnPetals(); setTimeout(() => goToPage(2), 1000);
+  }
+});
+
+/* ================================================================
+   PAGE 3: CANVAS ANIMATION
+   ================================================================ */
+const canvas = document.getElementById('phraseCanvas');
+const ctx = canvas.getContext('2d');
+let animFrameId = null;
+let canvasRunning = false;
+
+const colorSchemes = [
+  { bg: 'rgba(255,220,220,0.62)', text: '#c06070' },
+  { bg: 'rgba(255,245,235,0.68)', text: '#c06070' },
+  { bg: 'rgba(230,215,240,0.60)', text: '#7a5086' },
+  { bg: 'rgba(255,228,200,0.62)', text: '#b87050' },
+  { bg: 'rgba(210,225,245,0.60)', text: '#507090' },
+  { bg: 'rgba(205,235,225,0.60)', text: '#508070' },
+  { bg: 'rgba(248,215,222,0.60)', text: '#a05060' },
+  { bg: 'rgba(255,230,215,0.62)', text: '#b06555' },
+];
+
+class Particle {
+  constructor(text, colorScheme, t) {
+    this.text = text; this.color = colorScheme;
+    this.t = t; this.targetT = t; this.baseT = t;
+    const edge = Math.floor(Math.random() * 4);
+    const w = canvas.width; const h = canvas.height;
+    switch(edge) {
+      case 0: this.x = Math.random() * w; this.y = -30; break;
+      case 1: this.x = w + 30; this.y = Math.random() * h; break;
+      case 2: this.x = Math.random() * w; this.y = h + 30; break;
+      case 3: this.x = -30; this.y = Math.random() * h; break;
+    }
+    this.startX = this.x; this.startY = this.y;
+    this.heartX = 0; this.heartY = 0;
+    this.scale = 1; this.opacity = 0;
+    this.phase = 'flyIn'; this.phaseStart = 0;
+    this.flyInDuration = 3200 + Math.random() * 800;
+    this.flyInDelay = Math.random() * 600;
+    this.gatherDuration = 1800;
+    this.orbitSpeed = 0.08 + Math.random() * 0.12;
+    this.floatAmp = 3 + Math.random() * 6;
+    this.floatFreq = 0.6 + Math.random() * 0.8;
+    this.breatheAmp = 0.04 + Math.random() * 0.04;
+    this.breatheFreq = 0.7 + Math.random() * 0.6;
+    this.textWidth = 0; this.textHeight = 0;
+  }
+  update(now, globalElapsed) {
+    if (this.phase === 'flyIn') {
+      const elapsed = Math.max(0, globalElapsed - this.flyInDelay);
+      if (elapsed <= 0) { this.opacity = 0; return; }
+      const progress = Math.min(1, elapsed / this.flyInDuration);
+      const t = 1 - Math.pow(1 - progress, 3);
+      this.x = this.startX + (this.heartX - this.startX) * t;
+      this.y = this.startY + (this.heartY - this.startY) * t;
+      this.scale = 0.3 + 0.7 * t;
+      this.opacity = t * 0.82;
+      if (progress >= 1) { this.phase = 'gather'; this.phaseStart = now; }
+    } else if (this.phase === 'gather') {
+      this.x = this.heartX; this.y = this.heartY;
+      this.scale = 1; this.opacity = 0.82;
+      if (now - this.phaseStart > this.gatherDuration) { this.phase = 'orbit'; this.phaseStart = now; }
+    } else if (this.phase === 'orbit') {
+      const elapsed = (now - this.phaseStart) * 0.001;
+      this.targetT = this.baseT + elapsed * this.orbitSpeed;
+      const pt = heartPoint(this.targetT);
+      this.x = pt.x;
+      this.y = pt.y + Math.sin(elapsed * this.floatFreq) * this.floatAmp;
+      this.scale = 1 + Math.sin(elapsed * this.breatheFreq) * this.breatheAmp;
+      this.opacity = 0.75 + Math.sin(elapsed * this.breatheFreq * 1.3) * 0.08;
+    }
+  }
+}
+
+let particles = [];
+let animStartTime = 0;
+let heartScale = 1;
+let heartCenterX = 0;
+let heartCenterY = 0;
+
+function heartPoint(t) {
+  const x = 16 * Math.pow(Math.sin(t), 3);
+  const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+  return { x: heartCenterX + x * heartScale, y: heartCenterY - y * heartScale };
+}
+
+function drawRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r); ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r); ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r); ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r); ctx.closePath();
+}
+
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const w = window.innerWidth, h = window.innerHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(dpr, dpr);
+  heartScale = Math.min(w, h) * 0.021;
+  heartCenterX = w * 0.5; heartCenterY = h * 0.48;
+  particles.forEach(p => { const pt = heartPoint(p.targetT); p.heartX = pt.x; p.heartY = pt.y; });
+}
+
+function clampFont() { return Math.max(13, Math.min(17, window.innerWidth * 0.032)); }
+function getFontFamily() { return "'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif"; }
+
+function initParticles() {
+  particles = [];
+  const phrases = appData.phrases;
+  const n = Math.min(phrases.length, 100);
+  for (let i = 0; i < n; i++) {
+    const t = (i / n) * Math.PI * 2;
+    const p = new Particle(phrases[i], colorSchemes[i % colorSchemes.length], t);
+    const pt = heartPoint(t); p.heartX = pt.x; p.heartY = pt.y;
+    ctx.font = `${clampFont()}px "${getFontFamily()}"`;
+    const m = ctx.measureText(phrases[i]);
+    p.textWidth = m.width; p.textHeight = clampFont() * 1.3;
+    particles.push(p);
+  }
+}
+
+function drawHeartOutline() {
+  ctx.strokeStyle = 'rgba(192,96,112,0.08)'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let t = 0; t < Math.PI * 2; t += 0.02) {
+    const pt = heartPoint(t);
+    if (t === 0) ctx.moveTo(pt.x, pt.y); else ctx.lineTo(pt.x, pt.y);
+  }
+  ctx.closePath(); ctx.stroke();
+}
+
+function drawParticle(p) {
+  if (p.opacity <= 0.01) return;
+  const s = p.scale;
+  const px = 10 * s, py = 6 * s;
+  const w = p.textWidth * s + px * 2, h = p.textHeight * s + py * 2;
+  const x = p.x - w/2, y = p.y - h/2, r = 14 * s;
+  ctx.globalAlpha = p.opacity;
+  ctx.shadowColor = 'rgba(192,96,112,0.12)'; ctx.shadowBlur = 8 * s; ctx.shadowOffsetY = 2 * s;
+  ctx.fillStyle = p.color.bg; drawRoundRect(ctx, x, y, w, h, r); ctx.fill();
+  ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  ctx.fillStyle = p.color.text;
+  ctx.font = `${clampFont() * s}px "${getFontFamily()}"`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(p.text, p.x, p.y);
+  ctx.globalAlpha = 1;
+}
+
+function animate(timestamp) {
+  if (!canvasRunning) return;
+  if (animStartTime === 0) animStartTime = timestamp;
+  const elapsed = timestamp - animStartTime;
+  const w = window.innerWidth, h = window.innerHeight;
+  ctx.clearRect(0, 0, w, h);
+  drawHeartOutline();
+  particles.forEach(p => p.update(timestamp, elapsed));
+  [...particles].sort((a, b) => a.y - b.y).forEach(p => drawParticle(p));
+  animFrameId = requestAnimationFrame(animate);
+}
+
+function startCanvas() {
+  if (canvasRunning) return;
+  canvasRunning = true; animStartTime = 0;
+  resizeCanvas(); initParticles();
+  animFrameId = requestAnimationFrame(animate);
+}
+
+function stopCanvas() {
+  canvasRunning = false;
+  if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+}
+
+window.addEventListener('resize', () => { if (canvasRunning) { resizeCanvas(); initParticles(); } });
+
+/* ================================================================
+   PAGE NAVIGATION BINDINGS
+   ================================================================ */
+document.getElementById('toPhrasesBtn').addEventListener('click', () => goToPage(3));
+document.getElementById('toEssayBtn').addEventListener('click', () => goToPage(4));
+document.getElementById('essayBackBtn').addEventListener('click', () => goToPage(3));
+
+/* ================================================================
+   INIT
+   ================================================================ */
+// Apply loaded data to DOM
+document.getElementById('edNames').textContent = appData.names;
+document.getElementById('edSubtitle').textContent = appData.subtitle;
+applyEssayData();
+
+// Make page 1 elements editable on double-click in edit mode
+['edNames','edSubtitle'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('dblclick', () => {
+    if (!editMode) return;
+    el.contentEditable = 'true'; el.focus();
+  });
+  el.addEventListener('blur', () => { el.contentEditable = 'false'; });
+});
+
+buildCarousel();
+updateCarousel();
+resizeCanvas();
+</script>
+</body>
+</html>
