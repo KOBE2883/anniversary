@@ -305,6 +305,22 @@ html,body{
 }
 .edit-toggle:hover{color:rgba(192,96,112,0.75);border-color:rgba(192,96,112,0.4);background:rgba(255,255,255,0.7)}
 
+/* Music toggle (bottom-right) */
+.music-toggle{
+  position:fixed;bottom:clamp(12px,2vh,20px);right:clamp(12px,2vw,20px);z-index:9999;
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(192,96,112,0.2);background:rgba(255,255,255,0.45);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;color:rgba(192,96,112,0.45);transition:all .3s;
+}
+.music-toggle:hover{color:rgba(192,96,112,0.75);border-color:rgba(192,96,112,0.4);background:rgba(255,255,255,0.7)}
+.music-toggle.playing{color:rgba(192,96,112,0.85);border-color:rgba(192,96,112,0.35);animation:musicGlow 2s ease-in-out infinite}
+@keyframes musicGlow{
+  0%,100%{box-shadow:0 0 0 rgba(192,96,112,0)}
+  50%{box-shadow:0 0 14px rgba(192,96,112,0.25)}
+}
+
 /* Edit toolbar */
 .edit-toolbar{
   position:fixed;bottom:clamp(12px,2vh,20px);left:50%;transform:translateX(-50%);z-index:9998;
@@ -388,8 +404,9 @@ html,body{
 <!-- Hidden audio element -->
 <audio id="bgm" src="./music/anniversary-bgm.mp3" loop preload="auto"></audio>
 
-<!-- Hidden file input for image upload -->
+<!-- Hidden file inputs for upload -->
 <input type="file" id="imgUploadInput" accept="image/*" style="display:none">
+<input type="file" id="musicUploadInput" accept="audio/*" style="display:none">
 
 <!-- Toast -->
 <div id="toast"></div>
@@ -397,10 +414,14 @@ html,body{
 <!-- Edit toggle -->
 <button class="edit-toggle" id="editToggle" title="编辑模式">&#9998;</button>
 
+<!-- Music toggle -->
+<button class="music-toggle" id="musicToggle" title="音乐播放/暂停">&#9835;</button>
+
 <!-- Edit toolbar -->
 <div class="edit-toolbar" id="editToolbar">
   <button id="tbAddPhoto">+ 添加照片</button>
   <button id="tbEditPhrases">编辑短句</button>
+  <button id="tbUploadMusic">选择音乐</button>
   <button class="btn-primary" id="tbExport">导出页面</button>
   <button class="btn-danger" id="tbReset">重置全部</button>
   <button id="tbExitEdit">退出编辑</button>
@@ -895,6 +916,12 @@ document.getElementById('tbExport').addEventListener('click', () => {
     (m, a, b) => { const c = ((a||'')+(b||'')).replace(/\s+/g,' ').trim(); return c ? ` class="${c}"` : ''; });
   html = html.replace(/\scontenteditable="[^"]*"/g, '');
 
+  // Inject saved music if any
+  const savedMusic = localStorage.getItem('anniv_music');
+  if (savedMusic) {
+    html = html.replace('</script>', '</script>\n<script>localStorage.setItem("anniv_music","' + savedMusic + '");</script>');
+  }
+
   // Download
   const blob = new Blob(['<!DOCTYPE html>\n' + html.replace('<!DOCTYPE html>\n', '')], { type: 'text/html;charset=UTF-8' });
   const url = URL.createObjectURL(blob);
@@ -914,6 +941,7 @@ document.getElementById('tbExport').addEventListener('click', () => {
 document.getElementById('tbReset').addEventListener('click', () => {
   if (!confirm('确定要重置所有修改吗？这将清除所有编辑内容，恢复为默认状态。')) return;
   LS.resetAll();
+  localStorage.removeItem('anniv_music');
   appData = LS.load();
   // Restore DOM
   document.getElementById('edNames').textContent = appData.names;
@@ -928,6 +956,9 @@ document.getElementById('tbReset').addEventListener('click', () => {
   activeIndex = 0;
   updateCarousel();
   if (currentPage === 3) { stopCanvas(); startCanvas(); }
+  // Reset music to default
+  bgm.src = './music/anniversary-bgm.mp3'; bgm.load();
+  if (bgm.paused) musicToggle.classList.remove('playing');
   showToast('已恢复默认');
 });
 
@@ -1008,11 +1039,65 @@ function goToPage(n) {
    ================================================================ */
 let audioStarted = false;
 const bgm = document.getElementById('bgm');
+const musicToggle = document.getElementById('musicToggle');
+const musicUploadInput = document.getElementById('musicUploadInput');
+
+// Load saved music from localStorage
+(function() {
+  const saved = localStorage.getItem('anniv_music');
+  if (saved) {
+    bgm.src = saved;
+  }
+})();
+
 function startAudio() {
   if (audioStarted) return;
   bgm.volume = 0.4;
-  bgm.play().then(() => { audioStarted = true; }).catch(() => {});
+  bgm.play().then(() => {
+    audioStarted = true;
+    musicToggle.classList.add('playing');
+  }).catch(() => {});
 }
+
+// Music toggle button
+musicToggle.addEventListener('click', () => {
+  if (bgm.paused) {
+    bgm.play().then(() => {
+      audioStarted = true;
+      musicToggle.classList.add('playing');
+    }).catch(() => {});
+  } else {
+    bgm.pause();
+    musicToggle.classList.remove('playing');
+  }
+});
+
+// Sync button state when audio ends or is interrupted
+bgm.addEventListener('play', () => musicToggle.classList.add('playing'));
+bgm.addEventListener('pause', () => musicToggle.classList.remove('playing'));
+
+// Music upload in edit mode
+musicUploadInput.addEventListener('change', async () => {
+  const file = musicUploadInput.files[0];
+  if (!file) return;
+  if (file.size > 15 * 1024 * 1024) { showToast('音乐文件不能超过 15MB'); return; }
+  showToast('正在处理音乐...');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    localStorage.setItem('anniv_music', dataUrl);
+    bgm.src = dataUrl;
+    bgm.load();
+    if (audioStarted) { bgm.play().catch(() => {}); }
+    musicUploadInput.value = '';
+    showToast('音乐已更新');
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('tbUploadMusic').addEventListener('click', () => {
+  musicUploadInput.click();
+});
 
 /* ================================================================
    PETALS
