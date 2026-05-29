@@ -919,7 +919,8 @@ document.getElementById('tbExport').addEventListener('click', () => {
   // Inject saved music if any
   const savedMusic = localStorage.getItem('anniv_music');
   if (savedMusic) {
-    html = html.replace('</script>', '</script>\n<script>localStorage.setItem("anniv_music","' + savedMusic + '");</script>');
+    var endTag = '<'+'/script>';
+    html = html.replace(endTag, endTag + '\n<script>localStorage.setItem("anniv_music","' + savedMusic + '");' + endTag);
   }
 
   // Download
